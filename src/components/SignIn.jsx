@@ -1,0 +1,88 @@
+import { useState } from 'react'
+
+import { signInAuthUserWithEmailAndPassword } from '../utils/firebase'
+
+import FormInput from './FormInput'
+import Button from './Button'
+
+const defaultFormFields = {
+  email: '',
+  password: ''
+}
+
+const SignIn = () => {
+  const [formFields, setFormFields] = useState(defaultFormFields)
+  const { email, password } = formFields
+
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields)
+  }
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+
+    setFormFields({
+      ...formFields,
+      [name]: value
+    })
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    try {
+      const response = await signInAuthUserWithEmailAndPassword(email, password)
+      console.log(response)
+      resetFormFields()
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/invalid-email':
+          console.log('Invalid email')
+          break
+        case 'auth/user-disabled':
+          console.log('User disabled')
+          break
+        case 'auth/user-not-found':
+          console.log('User not found')
+          break
+        case 'auth/wrong-password':
+          console.log('Wrong password')
+          break
+        default:
+          console.log('Something went wrong', error)
+      }
+    }
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+
+        <FormInput
+          label='Email'
+          type='email'
+          onChange={handleChange}
+          required name='email'
+          value={email}
+        />
+        <FormInput
+          label='Password'
+          type='password'
+          onChange={handleChange}
+          required name='password'
+          value={password}
+        />
+
+        <div className='mt-8'>
+          <Button type='submit' buttonType='primary'>
+            Log In
+          </Button>
+        </div>
+
+      </form>
+
+    </div>
+  )
+}
+
+export default SignIn
