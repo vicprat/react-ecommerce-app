@@ -1,7 +1,21 @@
+/* eslint-disable react/jsx-indent */
+import { useContext } from 'react'
+
 import { Outlet, Link } from 'react-router-dom'
+
+import { UserContext } from '../contexts/UserContext'
+
+import { signOutUser } from '../utils/firebase'
+
 import crown from '../assets/crown.svg'
 
 const Navigation = () => {
+  const { currentUser, setCurrentUser } = useContext(UserContext)
+  const signOutHandler = async () => {
+    await signOutUser()
+    setCurrentUser(null)
+  }
+
   return (
     <>
       <nav className='p-3 border-gray-200 rounded bg-gray-50'>
@@ -22,9 +36,13 @@ const Navigation = () => {
               <li>
                 <Link to='/shop' className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Shop</Link>
               </li>
-              <li>
-                <Link to='/auth' className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Sign-in</Link>
-              </li>
+              {currentUser
+                ? (<li>
+                  <Link to='/auth' onClick={signOutHandler} className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Sign Out</Link>
+                   </li>)
+                : <li>
+                  <Link to='/auth' className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Sign In</Link>
+                  </li>}
               <li>
                 <Link to='#' className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Contact</Link>
               </li>
