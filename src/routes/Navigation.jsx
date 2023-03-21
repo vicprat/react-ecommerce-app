@@ -1,49 +1,157 @@
-/* eslint-disable react/jsx-indent */
-import { useContext } from 'react'
-
-import { Outlet, Link } from 'react-router-dom'
-
+/* eslint-disable react/jsx-closing-tag-location */
+import React, { useState, useContext } from 'react'
+import { Outlet, Link, NavLink } from 'react-router-dom'
 import { UserContext } from '../contexts/UserContext'
-
-import { signOutUser } from '../utils/firebase'
-
+import { CartContext } from '../contexts/CartContext'
 import crown from '../assets/crown.svg'
+import { Popover, Transition, Dialog } from '@headlessui/react'
+import { ShoppingBagIcon, UserCircleIcon, Bars3Icon } from '@heroicons/react/24/outline'
+import Button from '../components/Button'
+import ShoppingCart from '../components/ShoppingCart'
+
+const navigation = {
+  routes: [
+    { name: 'Home', href: '/' },
+    { name: 'Shop', href: '/shop' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' }
+  ]
+}
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext)
+  const { isCartOpen } = useContext(CartContext)
+  const { setCartOpen } = useContext(CartContext)
+
+  const [openMenu, setOpenMenu] = useState(false)
+
+  const toggleMenu = () => {
+    setOpenMenu(!openMenu)
+  }
+
+  const toggleCart = () => {
+    setCartOpen(!isCartOpen)
+  }
 
   return (
     <>
       <nav className='p-3 border-gray-200 rounded bg-gray-50'>
-        <div className='container flex flex-wrap items-center justify-between mx-auto'>
-          <a href='#' className='flex items-center'>
-            <img src={crown} className='h-6 mr-3 sm:h-10' alt='crwn-clothing Logo' />
-            <span className='self-center text-xl font-semibold whitespace-nowrap'>Crwon Clothing</span>
-          </a>
-          <button data-collapse-toggle='navbar-solid-bg' type='button' className='inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200' aria-controls='navbar-solid-bg' aria-expanded='false'>
-            <span className='sr-only'>Open main menu</span>
-            <svg className='w-6 h-6' aria-hidden='true' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'><path fillRule='evenodd' d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z' clip='evenodd' /></svg>
-          </button>
-          <div className='hidden w-full md:block md:w-auto' id='navbar-solid-bg'>
-            <ul className='flex flex-col mt-4 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent'>
-              <li>
-                <Link to='/' className='block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white' aria-current='page'>Home</Link>
-              </li>
-              <li>
-                <Link to='/shop' className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Shop</Link>
-              </li>
+        <div className='container flex flex-wrap items-center justify-between mx-auto h-16'>
+          {/* Brand Logo */}
+          <Link to='/' className='flex flex-1 ml-4 '>
+            <img src={crown} className='h-6 md:h-8' alt='crwn-clothing Logo' />
+          </Link>
+          {/* Links */}
+          <Popover.Group className='absolute inset-x-0 bottom-0 sm:static sm:flex-1 sm:self-stretch'>
+            <div className='flex h-14 items-center space-x-8 overflow-x-auto border-t px-4 pb-px sm:h-full sm:justify-center sm:overflow-visible sm:border-t-0 sm:pb-0'>
+              {navigation.routes.map((item) => (
+                <div key={item.name}>
+                  <NavLink
+                    key={item.name}
+                    to={item.href}
+                    className='flex items-center text-sm font-medium text-gray-600 hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600'
+                    style={({ isActive }) => {
+                      return {
+                        color: isActive ? 'rgb(79 70 229 / var(--tw-text-opacity))' : '',
+                        borderColor: isActive ? 'rgb(79 70 229 / var(--tw-text-opacity))' : ''
+                      }
+                    }}
+                  >
+                    {item.name}
+                  </NavLink>
+
+                  <Transition.Root show={openMenu}>
+                    <Dialog as='div' className='relative z-10' onClose={setOpenMenu}>
+                      <Transition.Child
+                        enter='ease-out duration-300'
+                        enterFrom='opacity-0'
+                        enterTo='opacity-100'
+                        leave='ease-in duration-200'
+                        leaveFrom='opacity-100'
+                        leaveTo='opacity-0'
+                      >
+                        <div className='fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity' />
+                      </Transition.Child>
+
+                      <div className='fixed inset-0 z-10 overflow-y-auto'>
+                        <div className='flex min-h-full items-start justify-center p-4 text-center mt-16 sm:items-center sm:p-0'>
+                          <Transition.Child
+                            enter='ease-out duration-300'
+                            enterFrom='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
+                            enterTo='opacity-100 translate-y-0 sm:scale-100'
+                            leave='ease-in duration-200'
+                            leaveFrom='opacity-100 translate-y-0 sm:scale-100'
+                            leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
+                          >
+                            <Dialog.Panel className='relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6'>
+                              <div className='sm:flex sm:items-start'>
+                                <div className='mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:mx-0 sm:h-10 sm:w-10'>
+                                  <img src={crown} className='h-6 md:h-8' alt='crwn-clothing Logo' />
+                                </div>
+                                <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
+                                  <Dialog.Title as='h3' className='text-base font-semibold leading-6 justify-start text-gray-900'>
+                                    Menu
+                                  </Dialog.Title>
+                                  <div className='overflow-hidden rounded-md bg-white shadow w-96'>
+                                    <ul role='list' className='divide-y divide-gray-200'>
+                                      {navigation.routes.map((item) => (
+                                        <NavLink
+                                          key={item.name}
+                                          to={item.href}
+                                          className='flex items-center text-lg font-medium text-gray-600 hover:text-teal-600'
+                                          style={({ isActive }) => {
+                                            return {
+                                              color: isActive ? 'rgb(13 148 136 / var(--tw-text-opacity))' : ''
+                                            }
+                                          }}
+                                        >
+                                          {item.name}
+                                        </NavLink>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </Dialog.Panel>
+                          </Transition.Child>
+                        </div>
+                      </div>
+                    </Dialog>
+                  </Transition.Root>
+                </div>
+              ))}
+            </div>
+          </Popover.Group>
+
+          <div className='flex flex-1 items-center justify-end'>
+            {/* Account  */}
+            <div className='flex text-center items-center justify-center'>
               {currentUser
-                ? (<li>
-                  <Link to='/auth' onClick={signOutUser} className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Sign Out</Link>
-                   </li>)
-                : <li>
-                  <Link to='/auth' className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Sign In</Link>
-                  </li>}
-              <li>
-                <Link to='#' className='block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0'>Contact</Link>
-              </li>
-            </ul>
+                ? (<Link to='/account' className=' text-gray-400 hover:text-gray-500'>
+                  <UserCircleIcon className='h-6 w-6' aria-hidden='true' />
+                </Link>)
+                : (<Link to='/auth' className=' text-gray-400 hover:text-gray-500 '>
+                  <UserCircleIcon className='h-6 w-6' aria-hidden='true' />
+                </Link>)}
+            </div>
+            {/* Cart */}
+            <div className='mx-4 lg:ml-8'>
+              <Button onClick={toggleCart} type='button' buttonType='icon'>
+                <ShoppingBagIcon
+                  className='h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500'
+                />
+              </Button>
+            </div>
+            {/* Resoponsive Menu */}
+            <div className='sm:hidden'>
+              <Button buttonType='icon' type='button' onClick={toggleMenu}>
+                <Bars3Icon className='w-6 h-6' />
+              </Button>
+            </div>
           </div>
+          <Transition.Root show>
+            {isCartOpen && (<ShoppingCart />)}
+          </Transition.Root>
         </div>
       </nav>
       <Outlet />
