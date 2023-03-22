@@ -20,16 +20,15 @@ const navigation = {
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext)
-  const { isCartOpen } = useContext(CartContext)
-  const { setCartOpen } = useContext(CartContext)
-
+  const { isCartOpen, setCartOpen, cartCount } = useContext(CartContext)
   const [openMenu, setOpenMenu] = useState(false)
 
   const toggleMenu = () => {
     setOpenMenu(!openMenu)
   }
 
-  const toggleCart = () => {
+  const toggleCart = (event) => {
+    event.stopPropagation()
     setCartOpen(!isCartOpen)
   }
 
@@ -60,7 +59,15 @@ const Navigation = () => {
                     {item.name}
                   </NavLink>
 
-                  <Transition.Root show={openMenu}>
+                  <Transition
+                    show={openMenu}
+                    enter='transform transition duration-[400ms]'
+                    enterFrom='opacity-0 scale-75'
+                    enterTo='opacity-100 scale-100'
+                    leave='transform transition duration-[400ms]'
+                    leaveFrom='opacity-100 scale-100'
+                    leaveTo='opacity-0 scale-75'
+                  >
                     <Dialog as='div' className='relative z-10' onClose={setOpenMenu}>
                       <Transition.Child
                         enter='ease-out duration-300'
@@ -92,13 +99,13 @@ const Navigation = () => {
                                   <Dialog.Title as='h3' className='text-base font-semibold leading-6 justify-start text-gray-900'>
                                     Menu
                                   </Dialog.Title>
-                                  <div className='overflow-hidden rounded-md bg-white shadow w-96'>
+                                  <div className='overflow-hidden rounded-md bg-white shadow '>
                                     <ul role='list' className='divide-y divide-gray-200'>
                                       {navigation.routes.map((item) => (
                                         <NavLink
                                           key={item.name}
                                           to={item.href}
-                                          className='flex items-center text-lg font-medium text-gray-600 hover:text-teal-600'
+                                          className='flex items-center text-lg font-medium text-gray-600 hover:text-teal-600 py-6 px-28 '
                                           style={({ isActive }) => {
                                             return {
                                               color: isActive ? 'rgb(13 148 136 / var(--tw-text-opacity))' : ''
@@ -117,7 +124,8 @@ const Navigation = () => {
                         </div>
                       </div>
                     </Dialog>
-                  </Transition.Root>
+                  </Transition>
+
                 </div>
               ))}
             </div>
@@ -136,11 +144,13 @@ const Navigation = () => {
             </div>
             {/* Cart */}
             <div className='mx-4 lg:ml-8'>
-              <Button onClick={toggleCart} type='button' buttonType='icon'>
+              <Button onClick={(event) => toggleCart(event)} type='button' buttonType='icon'>
                 <ShoppingBagIcon
                   className='h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500'
                 />
+                <span className='text-indigo-600'>{cartCount}</span>
               </Button>
+
             </div>
             {/* Resoponsive Menu */}
             <div className='sm:hidden'>
@@ -149,9 +159,17 @@ const Navigation = () => {
               </Button>
             </div>
           </div>
-          <Transition.Root show>
+          <Transition
+            show={isCartOpen}
+            enter='transition ease-out duration-150'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
+            leave='transition ease-in duration-150'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
+          >
             {isCartOpen && (<ShoppingCart />)}
-          </Transition.Root>
+          </Transition>
         </div>
       </nav>
       <Outlet />

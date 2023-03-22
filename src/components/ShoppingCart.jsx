@@ -1,35 +1,17 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { CartContext } from '../contexts/CartContext'
+import CartItem from './CartItem'
 
-const products = [
-  {
-    id: 1,
-    name: 'Zip Tote Basket',
-    href: '#',
-    color: 'White and black',
-    price: '$140.00',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-03.jpg',
-    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.'
-  },
-  {
-    id: 2,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    color: 'Salmon',
-    price: '$90.00',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.'
-  }
-  // More products...
-]
-
-export default function Example () {
-  const [open, setOpen] = useState(true)
+export default function ShoppingCart () {
+  const { isCartOpen, setCartOpen } = useContext(CartContext)
+  const { cartItems } = useContext(CartContext)
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as='div' className='relative z-10' onClose={setOpen}>
+    <Transition.Root show={isCartOpen} as={Fragment}>
+
+      <Dialog as='div' className='relative z-10' onClose={setCartOpen}>
         <Transition.Child
           as={Fragment}
           enter='ease-out duration-300'
@@ -57,10 +39,11 @@ export default function Example () {
                 <form className='relative flex w-full flex-col overflow-hidden bg-white pt-6 pb-8 sm:rounded-lg sm:pb-6 lg:py-8'>
                   <div className='flex items-center justify-between px-4 sm:px-6 lg:px-8'>
                     <h2 className='text-lg font-medium text-gray-900'>Shopping Cart</h2>
-                    <button type='button' className='text-gray-400 hover:text-gray-500' onClick={() => setOpen(false)}>
+                    <button type='button' className='text-gray-400 hover:text-gray-500' onClick={() => setCartOpen(false)}>
                       <span className='sr-only'>Close</span>
                       <XMarkIcon className='h-6 w-6' aria-hidden='true' />
                     </button>
+
                   </div>
 
                   <section aria-labelledby='cart-heading'>
@@ -69,51 +52,8 @@ export default function Example () {
                     </h2>
 
                     <ul role='list' className='divide-y divide-gray-200 px-4 sm:px-6 lg:px-8'>
-                      {products.map((product, productIdx) => (
-                        <li key={product.id} className='flex py-8 text-sm sm:items-center'>
-                          <img
-                            src={product.imageSrc}
-                            alt={product.imageAlt}
-                            className='h-24 w-24 flex-none rounded-lg border border-gray-200 sm:h-32 sm:w-32'
-                          />
-                          <div className='ml-4 grid flex-auto grid-cols-1 grid-rows-1 items-start gap-y-3 gap-x-5 sm:ml-6 sm:flex sm:items-center sm:gap-0'>
-                            <div className='row-end-1 flex-auto sm:pr-6'>
-                              <h3 className='font-medium text-gray-900'>
-                                <a href={product.href}>{product.name}</a>
-                              </h3>
-                              <p className='mt-1 text-gray-500'>{product.color}</p>
-                            </div>
-                            <p className='row-span-2 row-end-2 font-medium text-gray-900 sm:order-1 sm:ml-6 sm:w-1/3 sm:flex-none sm:text-right'>
-                              {product.price}
-                            </p>
-                            <div className='flex items-center sm:block sm:flex-none sm:text-center'>
-                              <label htmlFor={`quantity-${productIdx}`} className='sr-only'>
-                                Quantity, {product.name}
-                              </label>
-                              <select
-                                id={`quantity-${productIdx}`}
-                                name={`quantity-${productIdx}`}
-                                className='block max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm'
-                              >
-                                <option value={1}>1</option>
-                                <option value={2}>2</option>
-                                <option value={3}>3</option>
-                                <option value={4}>4</option>
-                                <option value={5}>5</option>
-                                <option value={6}>6</option>
-                                <option value={7}>7</option>
-                                <option value={8}>8</option>
-                              </select>
-
-                              <button
-                                type='button'
-                                className='ml-4 font-medium text-indigo-600 hover:text-indigo-500 sm:ml-0 sm:mt-2'
-                              >
-                                <span>Remove</span>
-                              </button>
-                            </div>
-                          </div>
-                        </li>
+                      {cartItems.map((item) => (
+                        <CartItem key={item.id} cartItem={item} />
                       ))}
                     </ul>
                   </section>
