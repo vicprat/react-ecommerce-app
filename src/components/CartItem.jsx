@@ -1,7 +1,12 @@
-import React from 'react'
+import Button from './Button'
+import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { useContext } from 'react'
+import { CartContext } from '../contexts/CartContext'
 
 const CartItem = ({ cartItem }) => {
   const { name, imageUrl, price, quantity } = cartItem
+  const { addItemToCart, removeItemToCart, clearItemFromCart } = useContext(CartContext)
+
   return (
     <li className='flex py-8 text-sm sm:items-center'>
       <img
@@ -13,22 +18,38 @@ const CartItem = ({ cartItem }) => {
         <div className='row-end-1 flex-auto sm:pr-6'>
           <h3 className='font-medium text-gray-900'>
             <a href={name}>{name}</a>
+            <p className='font-medium text-gray-900 sm:order-1 sm:ml-6 sm:w-1/3 sm:flex-none sm:text-right'>
+              ${price}
+            </p>
           </h3>
         </div>
-        <p className='row-span-2 row-end-2 font-medium text-gray-900 sm:order-1 sm:ml-6 sm:w-1/3 sm:flex-none sm:text-right'>
-          ${price}
-        </p>
+
         <p className='row-span-2 row-end-2 font-medium text-gray-900 sm:order-1 sm:ml-6 sm:w-1/3 sm:flex-none sm:text-right'>
           {quantity} x ${price}
         </p>
         <div className='flex items-center '>
-          <h3 className='font-medium text-gray-900'>{quantity}</h3>
-          <button
+          <Button
+            buttonType='icon'
             type='button'
-            className='ml-4 font-medium text-indigo-600 hover:text-indigo-500 '
+            onClick={() => removeItemToCart(cartItem)}
+          >
+            <MinusIcon className='h-5 w-5' />
+          </Button>
+          <h3 className='font-medium text-gray-900'>{quantity}</h3>
+          <Button
+            buttonType='icon'
+            type='button'
+            onClick={() => addItemToCart(cartItem)}
+          >
+            <PlusIcon className='h-5 w-5' />
+          </Button>
+          <Button
+            buttonType='terciary'
+            type='button'
+            onClick={() => clearItemFromCart(cartItem)}
           >
             <span>Remove</span>
-          </button>
+          </Button>
         </div>
       </div>
     </li>

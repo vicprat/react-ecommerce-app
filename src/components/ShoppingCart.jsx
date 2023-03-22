@@ -1,12 +1,26 @@
 import { Fragment, useContext } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 import { CartContext } from '../contexts/CartContext'
+
+import { Dialog, Transition } from '@headlessui/react'
+import { XMarkIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 import CartItem from './CartItem'
+import Button from './Button'
 
 export default function ShoppingCart () {
   const { isCartOpen, setCartOpen } = useContext(CartContext)
-  const { cartItems } = useContext(CartContext)
+  const { cartItems, cartTotal } = useContext(CartContext)
+
+  const navigate = useNavigate()
+
+  const shipping = cartTotal > 100 ? 0 : 20
+  const tax = cartTotal * 0.16
+  const total = cartTotal + shipping + tax
+
+  const goToCheckout = () => {
+    navigate('/checkout')
+    setCartOpen(false)
+  }
 
   return (
     <Transition.Root show={isCartOpen} as={Fragment}>
@@ -68,19 +82,20 @@ export default function ShoppingCart () {
                         <dl className='-my-4 divide-y divide-gray-200 text-sm'>
                           <div className='flex items-center justify-between py-4'>
                             <dt className='text-gray-600'>Subtotal</dt>
-                            <dd className='font-medium text-gray-900'>$262.00</dd>
+                            <dd className='font-medium text-gray-900'>${cartTotal}</dd>
                           </div>
                           <div className='flex items-center justify-between py-4'>
                             <dt className='text-gray-600'>Shipping</dt>
-                            <dd className='font-medium text-gray-900'>$5.00</dd>
+                            <dd className='font-medium text-gray-900'>${shipping.toFixed(2)}</dd>
+
                           </div>
                           <div className='flex items-center justify-between py-4'>
                             <dt className='text-gray-600'>Tax</dt>
-                            <dd className='font-medium text-gray-900'>$53.40</dd>
+                            <dd className='font-medium text-gray-900'>${tax.toFixed(2)}</dd>
                           </div>
                           <div className='flex items-center justify-between py-4'>
                             <dt className='text-base font-medium text-gray-900'>Order total</dt>
-                            <dd className='text-base font-medium text-gray-900'>$320.40</dd>
+                            <dd className='text-base font-medium text-gray-900'>${total.toFixed(2)}</dd>
                           </div>
                         </dl>
                       </div>
@@ -88,12 +103,15 @@ export default function ShoppingCart () {
                   </section>
 
                   <div className='mt-8 flex justify-end px-4 sm:px-6 lg:px-8'>
-                    <button
+                    <Button
+                      buttonType='terciary'
+                      onClick={goToCheckout}
                       type='submit'
-                      className='rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50'
+                      className='flex rounded-md border border-transparent bg-indigo-600 py-2 px-6 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50'
                     >
-                      Continue to Payment
-                    </button>
+                      <CreditCardIcon className='w-4 h-4 mx-2 ' />
+                      Checkout
+                    </Button>
                   </div>
                 </form>
               </Dialog.Panel>
