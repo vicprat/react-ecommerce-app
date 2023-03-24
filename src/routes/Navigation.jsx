@@ -41,7 +41,7 @@ const Navigation = () => {
             <img src={crown} className='h-6 md:h-8' alt='crwn-clothing Logo' />
           </Link>
           {/* Links */}
-          <Popover.Group className='absolute inset-x-0 bottom-0 sm:static sm:flex-1 sm:self-stretch'>
+          <Popover.Group className='hidden md:block absolute inset-x-0 bottom-0 md:static sm:flex-1 sm:self-stretch'>
             <div className='flex h-14 items-center space-x-8 overflow-x-auto border-t px-4 pb-px sm:h-full sm:justify-center sm:overflow-visible sm:border-t-0 sm:pb-0'>
               {navigation.routes.map((item) => (
                 <div key={item.name}>
