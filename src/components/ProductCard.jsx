@@ -26,13 +26,14 @@ export default function ProductCard ({ product }) {
           </h3>
           <p className='mt-1 text-sm text-gray-500'>${product.price}</p>
         </div>
-        <button
-          onClick={addProductToCart}
-          className='relative flex items-center justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-6 text-sm font-medium text-gray-100 hover:bg-indigo-500'
-        >
-          <ShoppingCartIcon className='w-4 h-4 mr-2' /> Add <span className='sr-only'>, {product.name}</span>
-        </button>
+
       </div>
+      <button
+        onClick={addProductToCart}
+        className='mt-4 relative flex items-center justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-6 text-sm font-medium text-gray-100 hover:bg-indigo-500'
+      >
+        <ShoppingCartIcon className='w-4 h-4 mr-2' /> Add <span className='sr-only'>, {product.name}</span>
+      </button>
     </div>
   )
 }
