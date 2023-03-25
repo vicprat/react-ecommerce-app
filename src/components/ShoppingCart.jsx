@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-closing-tag-location */
 import { Fragment, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CartContext } from '../contexts/CartContext'
@@ -13,7 +14,18 @@ export default function ShoppingCart () {
 
   const navigate = useNavigate()
 
-  const shipping = cartTotal > 100 ? 0 : 20
+  function calculateShipping (cartTotal) {
+    if (cartTotal === 0) {
+      return 0
+    } else if (cartTotal > 1 && cartTotal < 100) {
+      return 20
+    } else if (cartTotal >= 100) {
+      return 0
+    }
+  }
+
+  const shipping = calculateShipping(cartTotal)
+
   const tax = cartTotal * 0.16
   const total = cartTotal + shipping + tax
 
@@ -61,15 +73,16 @@ export default function ShoppingCart () {
                   </div>
 
                   <section aria-labelledby='cart-heading'>
-                    <h2 id='cart-heading' className='sr-only'>
-                      Items in your shopping cart
-                    </h2>
+                    {cartItems.length === 0
+                      ? (<div className='flex justify-center items-center h-96'>
+                        <p className='text-gray-500 text-2xl'>Your cart is empty</p>
+                      </div>)
+                      : (<ul role='list' className='divide-y divide-gray-200 px-4 sm:px-6 lg:px-8'>
+                        {cartItems.map((item) => (
+                          <CartItem key={item.id} cartItem={item} />
+                        ))}
+                      </ul>)}
 
-                    <ul role='list' className='divide-y divide-gray-200 px-4 sm:px-6 lg:px-8'>
-                      {cartItems.map((item) => (
-                        <CartItem key={item.id} cartItem={item} />
-                      ))}
-                    </ul>
                   </section>
 
                   <section aria-labelledby='summary-heading' className='mt-auto sm:px-6 lg:px-8'>

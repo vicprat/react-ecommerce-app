@@ -2,12 +2,13 @@
 import { useEffect, useState } from 'react'
 import { getRedirectResult } from 'firebase/auth'
 
-import { auth, createUserDocumentFromAuth, signInWithGoogleRedirect } from '../utils/firebase'
+import { auth, createUserDocumentFromAuth, signInWithGoogleRedirect, signOutUser } from '../utils/firebase'
 import { FaGoogle, FaGithub, FaTwitter } from 'react-icons/fa'
 
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
 import LogInButton from '../components/LogInButton'
+import Button from '../components/Button'
 
 const itemList = [
   {
@@ -69,7 +70,9 @@ const Authentication = () => {
               </p>
               </>}
         </div>
-
+        <Button onClick={signOutUser} buttonType='secondary' type='button'>
+              Sign Out
+        </Button>
         {toggleLogin ? <SignIn /> : <SignUp />}
 
         <div className='w-full flex items-center justify-between py-4'>
@@ -82,6 +85,7 @@ const Authentication = () => {
           {itemList.map((item) =>
             <LogInButton key={item.name} icon={item.icon} method={item.method} />
           )}
+
         </div>
 
       </div>

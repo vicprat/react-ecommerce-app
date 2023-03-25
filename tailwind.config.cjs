@@ -5,7 +5,8 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx}'
   ],
   plugins: [
-    require('@tailwindcss/forms')
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio')
   ],
   theme: {
     extend: {}

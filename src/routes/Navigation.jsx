@@ -105,10 +105,10 @@ const Navigation = () => {
                                         <NavLink
                                           key={item.name}
                                           to={item.href}
-                                          className='flex items-center text-lg font-medium text-gray-600 hover:text-teal-600 py-6 px-28 '
+                                          className='flex items-center text-lg font-medium text-gray-600 hover:text-indigo-600 py-6 px-28 '
                                           style={({ isActive }) => {
                                             return {
-                                              color: isActive ? 'rgb(13 148 136 / var(--tw-text-opacity))' : ''
+                                              color: isActive ? 'rgb(79 70 229 / var(--tw-text-opacity))' : ''
                                             }
                                           }}
                                         >
@@ -135,7 +135,7 @@ const Navigation = () => {
             {/* Account  */}
             <div className='flex text-center items-center justify-center'>
               {currentUser
-                ? (<Link to='/account' className=' text-gray-400 hover:text-gray-500'>
+                ? (<Link to='/auth' className=' text-gray-400 hover:text-gray-500'>
                   <UserCircleIcon className='h-6 w-6' aria-hidden='true' />
                 </Link>)
                 : (<Link to='/auth' className=' text-gray-400 hover:text-gray-500 '>
