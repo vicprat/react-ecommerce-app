@@ -56,7 +56,6 @@ const CategoryList = ({ categories }) => {
         <div className='mt-6 sm:hidden'>
           <Link to='shop' className='block text-sm font-semibold text-indigo-600 hover:text-indigo-500'>
             Browse all categories
-            <span aria-hidden='true'> &rarr;</span>
           </Link>
         </div>
       </div>

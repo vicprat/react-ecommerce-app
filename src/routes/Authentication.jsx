@@ -70,9 +70,7 @@ const Authentication = () => {
               </p>
               </>}
         </div>
-        <Button onClick={signOutUser} buttonType='secondary' type='button'>
-              Sign Out
-        </Button>
+
         {toggleLogin ? <SignIn /> : <SignUp />}
 
         <div className='w-full flex items-center justify-between py-4'>
@@ -87,7 +85,14 @@ const Authentication = () => {
           )}
 
         </div>
-
+        <div className='w-full flex items-center justify-between py-4'>
+          <hr className='w-full bg-gray-400' />
+          <p className='text-base font-medium leading-4 px-2.5 text-gray-400'>test btn </p>
+          <hr className='w-full bg-gray-400  ' />
+        </div>
+        <Button onClick={signOutUser} buttonType='secondary' type='button'>
+              Sign Out
+        </Button>
       </div>
     </div>
   )
