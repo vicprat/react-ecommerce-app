@@ -1,11 +1,17 @@
 import Button from './Button'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
-import { useContext } from 'react'
-import { CartContext } from '../contexts/CartContext'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectCartItems } from '../redux/cart/cartSelector'
+import { removeItemToCart, addItemToCart, clearItemFromCart } from '../redux/cart/cartAction'
 
 const CartItem = ({ cartItem }) => {
   const { name, imageUrl, price, quantity } = cartItem
-  const { addItemToCart, removeItemToCart, clearItemFromCart } = useContext(CartContext)
+  const cartItems = useSelector(selectCartItems)
+  const dispatch = useDispatch()
+
+  const removeHandler = () => dispatch(removeItemToCart(cartItems, cartItem))
+  const addHandler = () => dispatch(addItemToCart(cartItems, cartItem))
+  const clearHandler = () => dispatch(clearItemFromCart(cartItems, cartItem))
 
   return (
     <li className='flex py-8 text-sm sm:items-center'>
@@ -19,19 +25,19 @@ const CartItem = ({ cartItem }) => {
           <h3 className='font-medium text-gray-900'>
             <a href={name}>{name}</a>
             <p className='font-medium text-gray-900 sm:order-1 sm:ml-6 sm:w-1/3 sm:flex-none sm:text-right'>
-              ${price}
+              ${price.toFixed(2)}
             </p>
           </h3>
         </div>
 
         <p className='row-span-2 row-end-2 font-medium text-gray-900 sm:order-1 sm:ml-6 sm:w-1/3 sm:flex-none sm:text-right'>
-          {quantity} x ${price}
+          {quantity} x ${price.toFixed(2)}
         </p>
         <div className='flex items-center '>
           <Button
             buttonType='icon'
             type='button'
-            onClick={() => removeItemToCart(cartItem)}
+            onClick={removeHandler}
           >
             <MinusIcon className='h-5 w-5' />
           </Button>
@@ -39,14 +45,14 @@ const CartItem = ({ cartItem }) => {
           <Button
             buttonType='icon'
             type='button'
-            onClick={() => addItemToCart(cartItem)}
+            onClick={addHandler}
           >
             <PlusIcon className='h-5 w-5' />
           </Button>
           <Button
             buttonType='terciary'
             type='button'
-            onClick={() => clearItemFromCart(cartItem)}
+            onClick={clearHandler}
           >
             <span>Remove</span>
           </Button>

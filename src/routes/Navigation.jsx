@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-closing-tag-location */
-import React, { useState, useContext } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Outlet, Link, NavLink } from 'react-router-dom'
 import { selectCurrentUser } from '../redux/user/userSelector'
-import { CartContext } from '../contexts/CartContext'
+import { selectIsCartOpen, selectCartCount } from '../redux/cart/cartSelector'
+import { setIsCartOpen } from '../redux/cart/cartAction'
 import crown from '../assets/crown.svg'
 import { Popover, Transition, Dialog } from '@headlessui/react'
 import { ShoppingBagIcon, UserCircleIcon, Bars3Icon } from '@heroicons/react/24/outline'
@@ -21,16 +22,17 @@ const navigation = {
 
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser)
-  const { isCartOpen, setCartOpen, cartCount } = useContext(CartContext)
+  const isCartOpen = useSelector(selectIsCartOpen)
+  const cartCount = useSelector(selectCartCount)
+  const dispatch = useDispatch()
   const [openMenu, setOpenMenu] = useState(false)
 
   const toggleMenu = () => {
     setOpenMenu(!openMenu)
   }
 
-  const toggleCart = (event) => {
-    event.stopPropagation()
-    setCartOpen(!isCartOpen)
+  const toggleCart = () => {
+    dispatch(setIsCartOpen(!isCartOpen))
   }
 
   return (
@@ -152,7 +154,7 @@ const Navigation = () => {
             </div>
             {/* Cart */}
             <div className='mx-4 lg:ml-8'>
-              <Button onClick={(event) => toggleCart(event)} type='button' buttonType='icon'>
+              <Button onClick={toggleCart} type='button' buttonType='icon'>
                 <ShoppingBagIcon
                   className='h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500'
                 />

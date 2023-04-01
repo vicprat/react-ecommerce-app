@@ -1,7 +1,10 @@
 /* eslint-disable react/jsx-closing-tag-location */
-import { Fragment, useContext } from 'react'
+import { Fragment } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { CartContext } from '../contexts/CartContext'
+import { setIsCartOpen } from '../redux/cart/cartAction'
+
+import { selectCartItems, selectIsCartOpen, selectCartTotal } from '../redux/cart/cartSelector'
 
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon, CreditCardIcon } from '@heroicons/react/24/outline'
@@ -9,8 +12,14 @@ import CartItem from './CartItem'
 import Button from './Button'
 
 export default function ShoppingCart () {
-  const { isCartOpen, setCartOpen } = useContext(CartContext)
-  const { cartItems, cartTotal } = useContext(CartContext)
+  const isCartOpen = useSelector(selectIsCartOpen)
+  const cartItems = useSelector(selectCartItems)
+  const cartTotal = useSelector(selectCartTotal)
+  const dispatch = useDispatch()
+
+  const toggleCart = () => {
+    dispatch(setIsCartOpen(!isCartOpen))
+  }
 
   const navigate = useNavigate()
 
@@ -31,13 +40,13 @@ export default function ShoppingCart () {
 
   const goToCheckout = () => {
     navigate('/checkout')
-    setCartOpen(false)
+    toggleCart()
   }
 
   return (
     <Transition.Root show={isCartOpen} as={Fragment}>
 
-      <Dialog as='div' className='relative z-10' onClose={setCartOpen}>
+      <Dialog as='div' className='relative z-10' onClose={toggleCart}>
         <Transition.Child
           as={Fragment}
           enter='ease-out duration-300'
@@ -65,7 +74,7 @@ export default function ShoppingCart () {
                 <form className='relative flex w-full flex-col overflow-hidden bg-white pt-6 pb-8 sm:rounded-lg sm:pb-6 lg:py-8'>
                   <div className='flex items-center justify-between px-4 sm:px-6 lg:px-8'>
                     <h2 className='text-lg font-medium text-gray-900'>Shopping Cart</h2>
-                    <button type='button' className='text-gray-400 hover:text-gray-500' onClick={() => setCartOpen(false)}>
+                    <button type='button' className='text-gray-400 hover:text-gray-500' onClick={toggleCart}>
                       <span className='sr-only'>Close</span>
                       <XMarkIcon className='h-6 w-6' aria-hidden='true' />
                     </button>
@@ -95,7 +104,7 @@ export default function ShoppingCart () {
                         <dl className='-my-4 divide-y divide-gray-200 text-sm'>
                           <div className='flex items-center justify-between py-4'>
                             <dt className='text-gray-600'>Subtotal</dt>
-                            <dd className='font-medium text-gray-900'>${cartTotal}</dd>
+                            <dd className='font-medium text-gray-900'>${cartTotal.toFixed(2)}</dd>
                           </div>
                           <div className='flex items-center justify-between py-4'>
                             <dt className='text-gray-600'>Shipping</dt>
