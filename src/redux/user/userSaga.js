@@ -6,6 +6,9 @@ import { signInSuccess, signInFailed, signUpSuccess, signOutSuccess, signOutFail
 
 import { getCurrentUser, createUserDocumentFromAuth, signInWithGoogleRedirect, signInAuthUserWithEmailAndPassword, createAuthUserWithEmailAndPassword, signOutUser } from '../../utils/firebase'
 
+// In this file we are using the call effect to call the functions that we have created in the firebase.js file. We are also using the put effect to dispatch the actions that we have created in the userAction.js file.
+// The call effect is used to call a function and the put effect is used to dispatch an action.
+
 export function * getSnapShotFromUserAuth (userAuth, additionalDetails) {
   try {
     const userSnapshot = yield call(createUserDocumentFromAuth, userAuth, additionalDetails)
