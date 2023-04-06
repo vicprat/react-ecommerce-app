@@ -1,38 +1,28 @@
 /* eslint-disable react/jsx-indent */
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { getRedirectResult } from 'firebase/auth'
 
-import { auth, createUserDocumentFromAuth, signInWithGoogleRedirect, signOutUser } from '../utils/firebase'
-import { FaGoogle, FaGithub, FaTwitter } from 'react-icons/fa'
+import { auth, createUserDocumentFromAuth } from '../utils/firebase'
+import { googleSignInStart, signOutStart } from '../redux/user/userAction'
 
+import { FaGoogle } from 'react-icons/fa'
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
-import LogInButton from '../components/LogInButton'
 import Button from '../components/Button'
 
-const itemList = [
-  {
-    name: 'Google',
-    icon: <FaGoogle className='text-gray-600 hover:text-gray-500' />,
-    method: signInWithGoogleRedirect
-  },
-  {
-    name: 'Github',
-    icon: <FaGithub className='text-gray-600 hover:text-gray-500' />,
-    method: signInWithGoogleRedirect
-  },
-  {
-    name: 'Twitter',
-    icon: <FaTwitter className='text-gray-600 hover:text-gray-500' />,
-    method: signInWithGoogleRedirect
-  }
-]
-
 const Authentication = () => {
+  const dispatch = useDispatch()
   const [toggleLogin, setToggleLogin] = useState(true)
   const handleClick = () => {
     setToggleLogin(!toggleLogin)
   }
+
+  const signInWithGoogle = async () => {
+    dispatch(googleSignInStart())
+  }
+
+  const signOutUser = () => dispatch(signOutStart())
 
   useEffect(() => {
     getRedirectResult(auth).then((result) => {
@@ -79,12 +69,17 @@ const Authentication = () => {
           <hr className='w-full bg-gray-400  ' />
         </div>
 
-        <div className='flex justify-center gap-4'>
-          {itemList.map((item) =>
-            <LogInButton key={item.name} icon={item.icon} method={item.method} />
-          )}
+        <Button
+          onClick={signInWithGoogle}
+          buttonType='icon'
+          type='button'
+        >
+                <span className='absolute inset-y-0 left-0 flex items-center pl-3'>
+                  <FaGoogle className='h-5 w-5 text-gray-400 group-hover:text-gray-600' aria-hidden='true' />
+                </span>
+                Sign In with Google
+        </Button>
 
-        </div>
         <div className='w-full flex items-center justify-between py-4'>
           <hr className='w-full bg-gray-400' />
           <p className='text-base font-medium leading-4 px-2.5 text-gray-400'>test btn </p>

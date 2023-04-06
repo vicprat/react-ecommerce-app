@@ -138,14 +138,14 @@ const Navigation = () => {
             {/* Account  */}
             <div className='flex text-center items-center justify-center'>
               {currentUser
-                ? (<Link to='/account' className='block text-center text-gray-400 hover:text-gray-500'>
+                ? (<Link to='/auth' className='block text-center text-gray-400 hover:text-gray-500'>
                   <div className='flex items-center justify-center'>
                     <UserCircleIcon className='h-6 w-6' aria-hidden='true' />
                     <p>logOut</p>
                   </div>
                 </Link>
                   )
-                : (<Link to='/account' className='block text-center text-gray-400 hover:text-gray-500'>
+                : (<Link to='/auth' className='block text-center text-gray-400 hover:text-gray-500'>
                   <div className='flex items-center justify-center'>
                     <UserCircleIcon className='h-6 w-6' aria-hidden='true' />
                     <p>logIn</p>

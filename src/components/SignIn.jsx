@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { signInAuthUserWithEmailAndPassword } from '../utils/firebase'
+import { emailSignInStart } from '../redux/user/userAction'
 
 import FormInput from './FormInput'
 import Button from './Button'
@@ -11,6 +12,7 @@ const defaultFormFields = {
 }
 
 const SignIn = () => {
+  const dispatch = useDispatch()
   const [formFields, setFormFields] = useState(defaultFormFields)
   const { email, password } = formFields
 
@@ -31,26 +33,10 @@ const SignIn = () => {
     event.preventDefault()
 
     try {
-      const { user } = await signInAuthUserWithEmailAndPassword(email, password)
-
+      dispatch(emailSignInStart(email, password))
       resetFormFields()
     } catch (error) {
-      switch (error.code) {
-        case 'auth/invalid-email':
-          console.log('Invalid email')
-          break
-        case 'auth/user-disabled':
-          console.log('User disabled')
-          break
-        case 'auth/user-not-found':
-          console.log('User not found')
-          break
-        case 'auth/wrong-password':
-          console.log('Wrong password')
-          break
-        default:
-          console.log('Something went wrong', error)
-      }
+      console.log(error.message)
     }
   }
 
