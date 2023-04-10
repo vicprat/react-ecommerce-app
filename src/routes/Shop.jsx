@@ -6,7 +6,7 @@ import CategoriesPreview from './CategoriesPreview'
 import Category from './Category'
 
 import { getCategoriesAndDocuments } from '../utils/firebase'
-import { setCategories } from '../redux/categories/categoriesAction'
+import { setCategories } from '../redux/categories/categoriesSlice'
 
 const Shop = () => {
   const dispatch = useDispatch()

@@ -1,17 +1,15 @@
 import Button from './Button'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
-import { useSelector, useDispatch } from 'react-redux'
-import { selectCartItems } from '../redux/cart/cartSelector'
-import { removeItemToCart, addItemToCart, clearItemFromCart } from '../redux/cart/cartAction'
+import { useDispatch } from 'react-redux'
+import { removeItemFromCart, addItemToCart, clearItemFromCart } from '../redux/cart/cartSilce'
 
 const CartItem = ({ cartItem }) => {
   const { name, imageUrl, price, quantity } = cartItem
-  const cartItems = useSelector(selectCartItems)
   const dispatch = useDispatch()
 
-  const removeHandler = () => dispatch(removeItemToCart(cartItems, cartItem))
-  const addHandler = () => dispatch(addItemToCart(cartItems, cartItem))
-  const clearHandler = () => dispatch(clearItemFromCart(cartItems, cartItem))
+  const removeHandler = () => dispatch(removeItemFromCart(cartItem))
+  const addHandler = () => dispatch(addItemToCart(cartItem))
+  const clearHandler = () => dispatch(clearItemFromCart(cartItem))
 
   return (
     <li className='flex py-8 text-sm sm:items-center'>

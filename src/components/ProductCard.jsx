@@ -1,15 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { addItemToCart } from '../redux/cart/cartAction'
-import { selectCartItems } from '../redux/cart/cartSelector'
+import { useDispatch } from 'react-redux'
+import { addItemToCart } from '../redux/cart/cartSilce'
 
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 
 export default function ProductCard ({ product }) {
   const dispatch = useDispatch()
-  const cartItems = useSelector(selectCartItems)
 
   const addProductToCart = () => {
-    dispatch(addItemToCart(cartItems, product))
+    dispatch(addItemToCart(product))
   }
 
   return (

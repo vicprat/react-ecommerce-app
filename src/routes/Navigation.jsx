@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Outlet, Link, NavLink } from 'react-router-dom'
 import { selectCurrentUser } from '../redux/user/userSelector'
 import { selectIsCartOpen, selectCartCount } from '../redux/cart/cartSelector'
-import { setIsCartOpen } from '../redux/cart/cartAction'
+import { setIsCartOpen } from '../redux/cart/cartSilce'
 import crown from '../assets/crown.svg'
 import { Popover, Transition, Dialog } from '@headlessui/react'
 import { ShoppingBagIcon, UserCircleIcon, Bars3Icon } from '@heroicons/react/24/outline'
@@ -138,14 +138,14 @@ const Navigation = () => {
             {/* Account  */}
             <div className='flex text-center items-center justify-center'>
               {currentUser
-                ? (<Link to='/account' className='block text-center text-gray-400 hover:text-gray-500'>
+                ? (<Link to='/auth' className='block text-center text-gray-400 hover:text-gray-500'>
                   <div className='flex items-center justify-center'>
                     <UserCircleIcon className='h-6 w-6' aria-hidden='true' />
                     <p>logOut</p>
                   </div>
                 </Link>
                   )
-                : (<Link to='/account' className='block text-center text-gray-400 hover:text-gray-500'>
+                : (<Link to='/auth' className='block text-center text-gray-400 hover:text-gray-500'>
                   <div className='flex items-center justify-center'>
                     <UserCircleIcon className='h-6 w-6' aria-hidden='true' />
                     <p>logIn</p>

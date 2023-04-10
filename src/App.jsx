@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
 import { createUserDocumentFromAuth, onAuthStateChangedListener } from './utils/firebase/'
 
-import { setCurrentUser } from './redux/user/userAction'
+import { setCurrentUser } from './redux/user/userSlice'
 
 import Home from './routes/Home'
 import Navigation from './routes/Navigation'
@@ -18,7 +18,9 @@ const App = () => {
       if (user) {
         createUserDocumentFromAuth(user)
       }
-      dispatch(setCurrentUser(user))
+      const pickedUSer =
+      user && (({ accessToken, email }) => ({ accessToken, email }))(user)
+      dispatch(setCurrentUser(pickedUSer))
     })
 
     return unsubscribe
